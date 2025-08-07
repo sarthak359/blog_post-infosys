@@ -40,7 +40,7 @@ The application provides a clean and intuitive interface for both readers and au
 
 The homepage displays a list of all recent blog posts, showing the title, author, publication date, and a snippet of the content.
 
-![Homepage Screenshot](https://github.com/bharathkukka/BlogApplication/blob/9f0f41f8912134423f207e41378f18dfbd94e75e/Data/Home.png)
+![Homepage Screenshot](https://github.com/sarthak359/blog_post-infosys/blob/main/Data/blog-homepage.png)
 
 ---
 

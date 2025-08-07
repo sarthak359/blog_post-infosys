@@ -1,0 +1,106 @@
+{#{% extends "blog/base.html" %}#}
+{##}
+{#{% block content %}#}
+{#<div class="bg-white p-8 rounded-lg shadow-lg">#}
+{#    <h1 class="text-4xl font-bold mb-2 text-gray-900">{{ post.title }}</h1>#}
+{#    <p class="text-gray-600 text-sm mb-6">#}
+{#        By {{ post.author.username }} on {{ post.created_on.date }}#}
+{#    </p>#}
+{#    <div class="prose max-w-none text-gray-800 mb-8">#}
+{#        {{ post.content|linebreaks }}#}
+{#    </div>#}
+{#     <div>#}
+{#        {% for category in post.categories.all %}#}
+{#            <a href="{% url 'posts_by_category' category.name %}" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-300">#{{ category.name }}</a>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#</div>#}
+{##}
+{#<div class="bg-white p-8 rounded-lg shadow-lg mt-8">#}
+{#    <h3 class="text-2xl font-bold mb-4">Comments ({{ comments.count }})</h3>#}
+{#    <form method="post" class="space-y-4">#}
+{#        {% csrf_token %}#}
+{#        <div>#}
+{#            <label for="{{ comment_form.author.id_for_label }}" class="block text-sm font-medium text-gray-700">Name:</label>#}
+{#            {{ comment_form.author }}#}
+{#        </div>#}
+{#        <div>#}
+{#            <label for="{{ comment_form.body.id_for_label }}" class="block text-sm font-medium text-gray-700">Comment:</label>#}
+{#            {{ comment_form.body }}#}
+{#        </div>#}
+{#        <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">#}
+{#            Submit Comment#}
+{#        </button>#}
+{#    </form>#}
+{#    <hr class="my-6">#}
+{#    <div class="space-y-4">#}
+{#        {% for comment in comments %}#}
+{#        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">#}
+{#            <p class="font-semibold text-gray-800">{{ comment.author }} <span class="text-gray-500 text-sm font-normal">- {{ comment.created_on.date }}</span></p>#}
+{#            <p class="text-gray-700 mt-1">{{ comment.body|linebreaks }}</p>#}
+{#        </div>#}
+{#        {% empty %}#}
+{#        <p class="text-gray-600">No comments yet. Be the first to comment!</p>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#</div>#}
+{#{% endblock content %}#}
+
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-lg shadow-lg">
+    <div class="flex justify-between items-start">
+        <div>
+            <h1 class="text-4xl font-bold mb-2 text-gray-900">{{ post.title }}</h1>
+            <p class="text-gray-600 text-sm mb-6">
+                By {{ post.author.username }} on {{ post.created_on.date }}
+            </p>
+        </div>
+        <!-- NEW: Show Edit/Delete buttons only to the author -->
+        {% if user.is_authenticated and user == post.author %}
+        <div class="flex-shrink-0 ml-4">
+            <a href="{% url 'post_update' post.pk %}" class="text-blue-500 hover:underline mr-4">Edit</a>
+            <a href="{% url 'post_delete' post.pk %}" class="text-red-500 hover:underline">Delete</a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="prose max-w-none text-gray-800 mb-8">
+        {{ post.content|linebreaks }}
+    </div>
+     <div>
+        {% for category in post.categories.all %}
+            <a href="{% url 'posts_by_category' category.name %}" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-300">#{{ category.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="bg-white p-8 rounded-lg shadow-lg mt-8">
+    <h3 class="text-2xl font-bold mb-4">Comments ({{ comments.count }})</h3>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            <label for="{{ comment_form.author.id_for_label }}" class="block text-sm font-medium text-gray-700">Name:</label>
+            {{ comment_form.author }}
+        </div>
+        <div>
+            <label for="{{ comment_form.body.id_for_label }}" class="block text-sm font-medium text-gray-700">Comment:</label>
+            {{ comment_form.body }}
+        </div>
+        <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+            Submit Comment
+        </button>
+    </form>
+    <hr class="my-6">
+    <div class="space-y-4">
+        {% for comment in comments %}
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <p class="font-semibold text-gray-800">{{ comment.author }} <span class="text-gray-500 text-sm font-normal">- {{ comment.created_on.date }}</span></p>
+            <p class="text-gray-700 mt-1">{{ comment.body|linebreaks }}</p>
+        </div>
+        {% empty %}
+        <p class="text-gray-600">No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
